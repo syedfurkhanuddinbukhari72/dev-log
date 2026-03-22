@@ -13,6 +13,7 @@ The VMS Techs Dashboard has successfully transitioned from a local simulation to
 ### Key Improvements
 * **Endpoint Stability**: Replaced the "DNS Failure" placeholder with a stable, reachable domain.
 * **Production Simulation**: The project now behaves exactly like a professional enterprise dashboard by using real HTTP handshakes.
+* **API Optimization**: Increased refresh interval to 1 minute to stay within Mocky.io free tier limits while maintaining a live-data feel.
 * **Developer Experience**: Consolidated all logs (Main, API, UI, Final) into a clear, searchable repository.
 
 ### Summary
