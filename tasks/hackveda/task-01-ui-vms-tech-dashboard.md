@@ -2,15 +2,22 @@
 
 ## Problem
 
+* **Design Requirement**: Needed a high-contrast, premium "Live" look to reduce decision-making uncertainty for stakeholders.
 * **Visual Glitch**: The Annual Revenue KPI card displays a conflicting `+-` symbol for negative trends (e.g., `+-10.5%`).
-* **Impact**: Decreases dashboard professionalism and causes user confusion regarding data direction.
 
 ## Approach
 
-* **File involved**: Modified `src/js/app.js` within the `updateUI` function.
-* **Logic Correction**: Implemented conditional string interpolation to distinguish between positive and negative floats.
+* **Theme**: Implemented a **Dark Mode** high-contrast CSS theme in `src/css/style.css`.
+* **KPIs**: Designed premium cards with CSS animations (Pulse effect) for the "Live" status indicators.
+* **Charts**: Integrated **Chart.js** with custom linear gradients and 0.4 tension for smooth, professional curves.
+* **Pulse**: Connected all UI elements to an automatic refresh cycle for real-time data visibility.
+* **Logic Correction**: Implemented conditional string interpolation in `src/js/app.js` to distinguish between positive and negative floats.
 
 ## Errors & Fixes
+
+* **Error**: Chart flickered/re-animated every 5 seconds.
+  * **Reason**: Default Chart.js update behavior resets animations on each data refresh.
+  * **Fix**: Used `chart.update('none')` to ensure seamless "live" updates without distracting the user.
 
 * **Error**: Trend displayed as `+-10.5%`.
   * **Reason**: Static prefixing of `+` in the template literal combined with `.toFixed(1)` which already includes a `-` for negative numbers.
@@ -22,7 +29,8 @@
 
 ## Learning
 
-* **Floating Point Accuracy**: Always cast string-formatted numbers (from `.toFixed()`) back to floats before performing logical comparisons.
+* **UX Psychology**: Micro-animations (like the pulse dot) provide "Proof of Life" that reassures the user the data is current.
+* **Performance**: High-frequency chart updates are more efficient when bypassing global transitions.
 * **UI Resilience**: Visual symbols should be treated as data-driven elements, not static template parts.
 
 ## Improvements
