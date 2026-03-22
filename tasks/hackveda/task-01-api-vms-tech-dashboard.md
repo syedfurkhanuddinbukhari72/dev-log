@@ -2,38 +2,34 @@
 
 ## Problem
 
-* Total breakdown in data communication between frontend and backend.
-* Dashboard KPI cards and line charts fail to populate, resulting in empty or broken UI states.
+* **System Failure**: Dashboard remains empty or crashes because it attempts to fetch data from an unreachable endpoint.
+* **Impact**: The "Annual Revenue" card and charts fail to render because the "Waiter" (API) never returns from the "Kitchen" (Database).
 
 ## Approach
 
-* Analyzed browser console logs and network tab for `fetcher.js:8`.
-* Investigated retry logic and error handling patterns during network outages.
+* **Diagnostic**: Analyzed the communication gap between the frontend and backend using the **Restaurant Analogy**.
+* **Files involved**: Modified `src/api/fetcher.js` to investigate the handshake process.
 
 ## Errors & Fixes
 
-* **Error**: `net::ERR_NAME_NOT_RESOLVED` for `api.vms-techs.com`.
-    * **Reason**: The production API endpoint domain cannot be resolved by DNS, causing all fetch requests to fail immediately.
-    * **Fix**: Verify DNS records for `api.vms-techs.com` or switch to a stable development/local IP environment.
+* **Error**: `ERR_NAME_NOT_RESOLVED`.
+  * **Reason**: Using a "fake" production address (`api.vms-techs.com`) that hasn't been registered on the internet.
+  * **Fix**: Implement a "Temporary Waiter" using Mocky.io to provide a real, reachable URL.
 
 * **Error**: `Cannot read properties of undefined (reading 'value')`.
-    * **Reason**: Frontend logic tries to access nested properties of the API response before verifying the data object exists.
-    * **Fix**: Implement optional chaining (`data?.revenue?.value`) and ensure the local `mockData.json` fallback triggers correctly.
-
-* **Error**: `500 Internal Server Error`.
-    * **Reason**: Backend service crash during retry attempts, indicating server-side instability.
-    * **Fix**: Check server logs for memory leaks or unhandled exceptions in the API service.
+  * **Reason**: The fetcher fails to find the address, leaving the data variable empty/undefined.
+  * **Fix**: Ensure the API returns a valid JSON package before the frontend attempts to "draw" the charts.
 
 ## Root Cause
 
-* **DNS Resolution Failure**: The primary API endpoint is unreachable at the network level, triggering secondary logic crashes in the frontend.
+* **Endpoint Absence**: The single most critical issue is the lack of a reachable DNS-mapped URL to act as the middleman for data flow.
 
 ## Learning
 
-* **Defensive Coding**: Never assume an API response will be populated; always provide default objects for the UI to consume.
-* **Network Robustness**: DNS-level failures highlight why "Local Fallback" is the most critical feature of a production-ready dashboard.
+* **API Middleware**: The API is not just a link; it's the specific "Waiter" that packages raw database info into JSON for the dashboard to consume.
+* **The Handshake**: A dashboard's visual "Glow" is entirely dependent on a successful request-response cycle.
+* **Integration Strategy**: Using Mocky.io allows for "Production Simulation" when the primary backend is under maintenance or unregistered.
 
 ## Improvements
 
-* **Circuit Breaker**: Implement a mechanism that stops trying the production API after 3 consecutive DNS failures and stays on Mock Data until a manual reset.
-* **Global Error Boundary**: Add a UI-level check that displays a "Maintenance Mode" banner instead of raw JavaScript console errors.
+* **Transition Plan**: Move from static `mockData.json` to a **Live Mocky URL** to practice real-world HTTP header handling and async timing.
