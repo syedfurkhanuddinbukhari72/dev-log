@@ -6,8 +6,8 @@ The VMS Techs Dashboard has successfully transitioned from a local simulation to
 
 ### Final Outcome
 * **API Integration**: Successfully connected the frontend to a cloud-hosted REST API on `mockly.me`.
-- **Live URL**: `https://mockly.me/custom/vms-revenue-v1`
-* **Real-Time Updates**: Dashboard now pulls fresh data from the internet every 5 seconds.
+- **Live URL**: `https://mockly.me/custom/vms-revenue-v2`
+* **Real-Time Updates**: Dashboard now pulls fresh data from the internet every 1 minute (optimized for API limits).
 * **Resiliency**: The "Local Fallback" logic remains active, ensuring the dashboard never stays empty if the cloud service goes offline.
 
 ### Key Improvements
